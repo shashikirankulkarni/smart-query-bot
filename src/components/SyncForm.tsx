@@ -17,7 +17,7 @@ export default function SyncForm({ onSyncSuccess }: Props) {
         setLoading(true);
         setStatusMessage("");
         try {
-            const res = await api.post("/sync", { sheet_url: url });
+            await api.post("/sync", { sheet_url: url });
             const now = new Date();
             const timeStr = now.toLocaleTimeString([], {
                 hour: "2-digit",
