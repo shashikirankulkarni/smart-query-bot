@@ -1,7 +1,6 @@
 import { useState } from "react";
 import SyncForm from "./components/SyncForm";
 import ChatInterface from "./components/ChatInterface";
-import companyLogo from '/smartquerybot.png';
 
 function App() {
   const [syncedUrl, setSyncedUrl] = useState<string | null>(null);
