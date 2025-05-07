@@ -72,7 +72,7 @@ export default function SyncForm({ onSyncSuccess }: Props) {
                     <div className="mb-4 text-sm text-gray-700 bg-yellow-50 border border-yellow-300 p-3 rounded">
                         <strong>📝 Note:</strong> Your Google Sheet must have two columns named:
                         <span className="font-medium text-gray-900"> "Question" </span> and
-                        <span className="font-medium text-gray-900"> "Answer" </span>. The bot will only respond based on these values.
+                        <span className="font-medium text-gray-900"> "Answer" </span>. The bot will answer intelligently based on your custom data.
                     </div>
                     <p className="text-sm text-gray-700 mb-2 font-medium">
                         Want to try a sample sheet?
@@ -84,7 +84,7 @@ export default function SyncForm({ onSyncSuccess }: Props) {
                             rel="noopener noreferrer"
                             className="text-sm bg-blue-50 hover:bg-blue-100 border border-blue-300 text-blue-700 px-3 py-2 rounded text-center"
                         >
-                            📂 Open Sample Sheet
+                            📂 View Sample Sheet
                         </a>
                         <button
                             type="button"

@@ -10,3 +10,8 @@ export const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+export const fetchVisits = async (): Promise<number> => {
+    const res = await api.get("/visits");
+    return res.data.visits;
+  };
