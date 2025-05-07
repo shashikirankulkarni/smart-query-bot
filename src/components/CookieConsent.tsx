@@ -16,7 +16,7 @@ export default function CookieConsent() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md z-50 px-4 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md z-50 px-2 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
       <p className="text-gray-800 mb-2 sm:mb-0">
         We use cookies to analyze site traffic and enhance your experience. By using our site, you consent to analytics tracking.
       </p>

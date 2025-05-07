@@ -4,6 +4,12 @@ import ChatInterface from "./components/ChatInterface";
 import CookieConsent from "./components/CookieConsent";
 import { fetchVisits } from "./api";
 
+declare global {
+  interface Window {
+    google?: any;
+  }
+}
+
 function App() {
   const [syncedUrl, setSyncedUrl] = useState<string | null>(null);
   const [visits, setVisits] = useState<number | null>(null);
@@ -47,12 +53,8 @@ function App() {
         {syncedUrl && <ChatInterface sheetUrl={syncedUrl} />}
       </main>
 
-      <footer className="fixed bottom-0 left-0 w-full border-t bg-white shadow text-sm text-gray-600 z-50 py-1 px-1">
+      <footer className="fixed bottom-0 left-0 w-full border-t bg-white shadow text-sm text-gray-600 z-50 py-3 px-2">
         <div className="relative max-w-5xl mx-auto flex justify-center items-center gap-16">
-          {/* Left: Translator */}
-          <div className="bg-white text-sm text-gray-600 scale-70">
-            <div id="google_translate_element" />
-          </div>
           {/* Center: Author */}
           <div className="text-center">
             © Built by <strong className="font-semibold text-black">Shashikiran Kulkarni</strong>
