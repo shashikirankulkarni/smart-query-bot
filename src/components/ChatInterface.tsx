@@ -52,7 +52,7 @@ export default function ChatInterface({ sheetUrl }: Props) {
         } catch (e: any) {
             setMessages((prev) => [
                 ...prev,
-                { role: "bot", text: "⚠️ Failed to get response. Please try again.", time: now },
+                { role: "bot", text: "Sorry, did not catch that. Please try again..", time: now },
             ]);
         } finally {
             setLoading(false);
