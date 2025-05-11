@@ -42,7 +42,6 @@ function App() {
           <div className="text-xs text-gray-600 flex items-center gap-1">
             <span>Total Visits: <strong className="text-black">{visits}</strong></span>
             <img src="/google-analytics-logo.png" alt="Google Analytics" className="h-4 w-4" />
-            <span className="text-gray-400">Powered by Google Analytics</span>
           </div>
         )}
       </header>
