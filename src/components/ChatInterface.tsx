@@ -50,15 +50,12 @@ export default function ChatInterface({ sheetUrl }: Props) {
             const botMsg: Message = { role: "bot", text: res.data.answer, time: now };
             setMessages((prev) => [...prev, botMsg]);
         } catch (e: any) {
-            setMessages((prev) => [
-                ...prev,
-                {
-                    role: "bot",
-                    text: e?.response?.data?.detail || "Something went wrong. Please try again.",
-                    time: now,
-                },
-            ]);
-        } finally {
+            const errorMsg =
+                e?.response?.data?.detail || e?.message || "Sorry, I did not catch that. Please try again.";
+            const botMsg: Message = { role: "bot", text: errorMsg, time: now };
+            setMessages((prev) => [...prev, botMsg]);
+        }
+        finally {
             setLoading(false);
         }
     };
