@@ -47,16 +47,27 @@ export default function ChatInterface({ sheetUrl }: Props) {
                 sheet_url: sheetUrl,
                 question: input,
             });
-            const botMsg: Message = { role: "bot", text: res.data.answer, time: now };
+
+            const botMsg: Message = {
+                role: "bot",
+                text: res.data.answer || "⚠️ No response from bot.",
+                time: now,
+            };
+
+            // Add bot response *before* turning off loading
             setMessages((prev) => [...prev, botMsg]);
         } catch (e: any) {
-            const errorMsg =
-                e?.response?.data?.detail || e?.message || "Sorry, I did not catch that. Please try again.";
-            const botMsg: Message = { role: "bot", text: errorMsg, time: now };
-            setMessages((prev) => [...prev, botMsg]);
-        }
-        finally {
-            setLoading(false);
+            setMessages((prev) => [
+                ...prev,
+                {
+                    role: "bot",
+                    text: "Sorry, I did not catch that. Please try again.",
+                    time: now,
+                },
+            ]);
+        } finally {
+            // Delay 100ms to allow React render flush
+            setTimeout(() => setLoading(false), 100);
         }
     };
 
