@@ -17,26 +17,46 @@ export default function ChatInterface({ sheetUrl }: Props) {
     const [loading, setLoading] = useState(false);
     const chatEndRef = useRef<HTMLDivElement>(null);
 
-    // Initial bot message after sync
+    // Initial bot welcome message
     useEffect(() => {
         const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
         setMessages([
             {
                 role: "bot",
                 text: "Hey There, Welcome! How Can I help you?",
-                time: now
+                time: now,
             },
         ]);
     }, [sheetUrl]);
 
-    // Scroll to bottom on new message
+    // Auto scroll to bottom on new message
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+    // Force stop loading spinner if stuck
+    useEffect(() => {
+        if (loading) {
+            const timeout = setTimeout(() => {
+                setLoading(false);
+                const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        role: "bot",
+                        text: "Request timed out. Please try again.",
+                        time: now,
+                    },
+                ]);
+            }, 6000); // 6 seconds
+            return () => clearTimeout(timeout);
+        }
+    }, [loading]);
+
     const sendMessage = async () => {
+        if (loading || !input.trim()) return;
+
         const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        if (!input.trim()) return;
         const userMsg: Message = { role: "you", text: input, time: now };
         setMessages((prev) => [...prev, userMsg]);
         setLoading(true);
@@ -47,28 +67,32 @@ export default function ChatInterface({ sheetUrl }: Props) {
                 sheet_url: sheetUrl,
                 question: input,
             });
-
-            const botMsg: Message = {
-                role: "bot",
-                text: res.data.answer || "⚠️ No response from bot.",
-                time: now,
-            };
-
-            // Add bot response *before* turning off loading
+            const botMsg: Message = { role: "bot", text: res.data.answer, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
             setMessages((prev) => [...prev, botMsg]);
         } catch (e: any) {
+            const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
             setMessages((prev) => [
                 ...prev,
                 {
                     role: "bot",
-                    text: "Sorry, I did not catch that. Please try again.",
+                    text: "Sorry, I didn't catch that. Please try again.",
                     time: now,
                 },
             ]);
         } finally {
-            // Delay 100ms to allow React render flush
-            setTimeout(() => setLoading(false), 100);
+            setLoading(false);
         }
+    };
+
+    const clearChat = () => {
+        const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        setMessages([
+            {
+                role: "bot",
+                text: "Hey There, Welcome! How Can I help you?",
+                time: now,
+            },
+        ]);
     };
 
     return (
@@ -77,17 +101,12 @@ export default function ChatInterface({ sheetUrl }: Props) {
                 {messages.map((msg, idx) => (
                     <div
                         key={idx}
-                        className={`my-2 flex items-start ${msg.role === "you" ? "justify-end" : "justify-start"
-                            }`}
+                        className={`my-2 flex items-start ${msg.role === "you" ? "justify-end" : "justify-start"}`}
                     >
-                        {msg.role === "bot" && (
-                            <div className="mr-2 text-2xl">🤖</div>
-                        )}
+                        {msg.role === "bot" && <div className="mr-2 text-2xl">🤖</div>}
 
                         <div
-                            className={`p-2 rounded-md max-w-[80%] ${msg.role === "you"
-                                ? "bg-blue-100 text-right"
-                                : "bg-gray-200 text-left"
+                            className={`p-2 rounded-md max-w-[80%] ${msg.role === "you" ? "bg-blue-100 text-right" : "bg-gray-200 text-left"
                                 }`}
                         >
                             <div className="text-sm">{msg.text}</div>
@@ -136,7 +155,7 @@ export default function ChatInterface({ sheetUrl }: Props) {
                     placeholder="Ask a question..."
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                    onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}
                 />
                 <button
                     className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
@@ -144,6 +163,12 @@ export default function ChatInterface({ sheetUrl }: Props) {
                     disabled={loading}
                 >
                     Send
+                </button>
+                <button
+                    className="bg-gray-400 text-white px-4 py-2 rounded"
+                    onClick={clearChat}
+                >
+                    Clear
                 </button>
             </div>
         </div>
