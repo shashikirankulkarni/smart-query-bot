@@ -52,7 +52,11 @@ export default function ChatInterface({ sheetUrl }: Props) {
         } catch (e: any) {
             setMessages((prev) => [
                 ...prev,
-                { role: "bot", text: "Sorry, did not catch that. Please try again..", time: now },
+                {
+                    role: "bot",
+                    text: e?.response?.data?.detail || "Something went wrong. Please try again.",
+                    time: now,
+                },
             ]);
         } finally {
             setLoading(false);
@@ -74,8 +78,8 @@ export default function ChatInterface({ sheetUrl }: Props) {
 
                         <div
                             className={`p-2 rounded-md max-w-[80%] ${msg.role === "you"
-                                    ? "bg-blue-100 text-right"
-                                    : "bg-gray-200 text-left"
+                                ? "bg-blue-100 text-right"
+                                : "bg-gray-200 text-left"
                                 }`}
                         >
                             <div className="text-sm">{msg.text}</div>
