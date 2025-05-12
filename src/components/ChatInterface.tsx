@@ -148,7 +148,7 @@ export default function ChatInterface({ sheetUrl }: Props) {
                 <div ref={chatEndRef} />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
                 <input
                     type="text"
                     className="flex-1 p-2 border rounded"
@@ -157,20 +157,23 @@ export default function ChatInterface({ sheetUrl }: Props) {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}
                 />
-                <button
-                    className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
-                    onClick={sendMessage}
-                    disabled={loading}
-                >
-                    Send
-                </button>
-                <button
-                    className="bg-gray-400 text-white px-4 py-2 rounded"
-                    onClick={clearChat}
-                >
-                    Clear
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
+                        onClick={sendMessage}
+                        disabled={loading}
+                    >
+                        Send
+                    </button>
+                    <button
+                        className="bg-gray-400 text-white px-4 py-2 rounded"
+                        onClick={clearChat}
+                    >
+                        Clear
+                    </button>
+                </div>
             </div>
+
         </div>
     );
 }
